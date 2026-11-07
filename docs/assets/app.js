@@ -33,6 +33,7 @@ const TYPE_LABEL = { command: 'Command', script: 'Script', tip: 'Tip', link: 'Li
 const LANG_LABEL = {
   cmd: 'CMD', powershell: 'PowerShell', bash: 'Bash', zsh: 'Mac Terminal', run: 'Win + R',
   reg: 'Registry', text: 'Text', json: 'JSON', sql: 'SQL', ini: 'Config', xml: 'XML', yaml: 'YAML',
+  diskpart: 'DISKPART',
 };
 const COMMENT_RE = {
   powershell: /^\s*#/,
