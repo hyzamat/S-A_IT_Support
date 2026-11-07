@@ -1,0 +1,19 @@
+{
+  "name": "itsupport-toolkit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Password-protected IT support command & tips library (static site for GitHub Pages)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "deploy": "node tools/build.mjs --deploy",
+    "build:new": "node tools/build.mjs --new",
+    "setup-editing": "node tools/build.mjs --setup-editing",
+    "check": "node tools/build.mjs --check",
+    "restore": "node tools/build.mjs --restore",
+    "start": "node tools/serve.mjs"
+  }
+}

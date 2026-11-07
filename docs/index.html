@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://api.github.com; base-uri 'none'; form-action 'none'">
+  <title>IT Support Toolkit</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/app.css">
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <noscript><p class="noscript">This toolkit needs JavaScript enabled.</p></noscript>
+  <div id="boot" class="boot" aria-hidden="true"><span class="spinner"></span></div>
+
+  <!-- ============ Login ============ -->
+  <main id="login-view" class="login" hidden>
+    <form id="login-form" class="login-card" autocomplete="off" novalidate>
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">&gt;_</div>
+        <div>
+          <h1>IT Support Toolkit</h1>
+          <p class="muted small">itsupport.hizarc.com</p>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Username</span>
+        <input id="login-user" name="its-user" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" required>
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <span class="pw-wrap">
+          <input id="login-pass" name="its-pass" type="password" autocomplete="off" required>
+          <button type="button" id="pw-toggle" class="pw-toggle" aria-label="Show password" aria-pressed="false">Show</button>
+        </span>
+      </label>
+
+      <p id="caps-warning" class="caps" hidden>⇪ Caps Lock is on</p>
+      <p id="login-error" class="login-error" role="alert" hidden></p>
+
+      <button id="login-btn" type="submit" class="btn primary">
+        <span class="spinner sm" hidden></span><span class="label">Unlock</span>
+      </button>
+
+      <p class="fine">
+        🔒 Content is encrypted and unlocked only in this browser tab.
+        Session ends when the tab closes or after <span data-idle>15</span> minutes idle.
+        On a client PC, choose <strong>Never</strong> if the browser offers to save the password.
+      </p>
+    </form>
+  </main>
+
+  <!-- ============ App ============ -->
+  <div id="app-view" class="app" hidden>
+    <header class="topbar">
+      <div class="brand-mini">
+        <span class="brand-logo sm" aria-hidden="true">&gt;_</span>
+        <span class="brand-name">IT Support</span>
+      </div>
+
+      <div class="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.41 1.4-5.4-5.39A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+        <input id="search" type="search" placeholder="Search commands, scripts, tips, links…" autocomplete="off" spellcheck="false" aria-label="Search">
+        <kbd title="Press / to search">/</kbd>
+      </div>
+
+      <div class="top-actions">
+        <button id="profile-btn" type="button" class="profile-btn" title="Profile" aria-haspopup="dialog">
+          <span id="user-label" class="user-label"></span><span id="session-count" class="count-pill" hidden></span>
+        </button>
+        <button id="add-btn" type="button" class="btn ghost add-btn" title="Add a new command, script, tip or link">＋ Add</button>
+        <button id="theme-btn" type="button" class="icon-btn" title="Switch light / dark theme" aria-label="Switch theme">◐</button>
+        <button id="logout-btn" type="button" class="btn ghost" title="Log out and clear the clipboard">Log out</button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav id="sidebar" class="sidebar" aria-label="Categories">
+        <div class="side-title">Categories</div>
+        <div id="cat-list" class="cat-list"></div>
+        <div class="side-foot">
+          <div id="built-label"></div>
+          <div>Auto-logout after <span data-idle>15</span> min idle</div>
+          <div><kbd>/</kbd> search · <kbd>Esc</kbd> clear</div>
+        </div>
+      </nav>
+
+      <main class="content">
+        <div class="toolbar">
+          <div id="type-tabs" class="tabs" role="tablist" aria-label="Type"></div>
+          <span id="result-count" class="result-count"></span>
+        </div>
+        <div id="results" class="results" aria-live="polite"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ============ Add from the website ============ -->
+  <dialog id="add-dialog" class="dialog" aria-labelledby="add-heading">
+    <form id="add-form" class="dlg" autocomplete="off" novalidate>
+      <header class="dlg-head">
+        <h2 id="add-heading">Add to the toolkit</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Close">✕</button>
+      </header>
+
+      <div class="dlg-body">
+        <div id="add-setup" class="note warn" hidden>
+          ⚠️ Saving from the website is not set up yet. On your own PC run
+          <code class="ic">npm run setup-editing</code> and then <code class="ic">npm run deploy</code>.
+        </div>
+
+        <div class="row">
+          <label class="field grow"><span>Category</span><select id="add-cat"></select></label>
+          <label class="field grow" id="add-newcat-wrap" hidden><span>New category name <small>start with an emoji for the icon</small></span><input id="add-newcat" type="text" maxlength="60" placeholder="🧪 My category"></label>
+        </div>
+
+        <label class="field"><span>Title <em>*</em></span><input id="add-title" type="text" maxlength="140" placeholder="e.g. Rebuild the Windows Search index"></label>
+
+        <label class="field"><span>Description <small>optional · lines starting 1. 2. 3. become steps · start a line with &gt; for a note</small></span><textarea id="add-desc" rows="3"></textarea></label>
+
+        <div class="row">
+          <label class="field"><span>Code type</span>
+            <select id="add-shell">
+              <option value="powershell">PowerShell</option>
+              <option value="cmd">CMD</option>
+              <option value="run">Win + R</option>
+              <option value="zsh">Mac Terminal</option>
+              <option value="bash">Linux / Bash</option>
+              <option value="text">Text</option>
+            </select>
+          </label>
+          <label class="check"><input id="add-admin" type="checkbox"> Run as admin</label>
+          <label class="check"><input id="add-pin" type="checkbox"> Pin ⭐</label>
+        </div>
+
+        <label class="field"><span>Command or script <small>{{name}} = fill-in box · {{port:443}} = box with a default</small></span><textarea id="add-code" rows="6" class="mono" spellcheck="false" wrap="off" autocapitalize="off"></textarea></label>
+
+        <div class="row">
+          <label class="field grow"><span>Tags <small>comma separated</small></span><input id="add-tags" type="text" placeholder="dns, network"></label>
+          <label class="field grow"><span>Link <small>optional</small></span><input id="add-url" type="url" placeholder="https://…"></label>
+        </div>
+
+        <label class="field" id="add-token-wrap" hidden><span>GitHub token <small>used for this tab only — never saved</small></span><input id="add-token" type="password" autocomplete="off" spellcheck="false"></label>
+
+        <div class="preview-title">Preview</div>
+        <div id="add-preview" class="add-preview"></div>
+        <p id="add-error" class="login-error" role="alert" hidden></p>
+      </div>
+
+      <footer class="dlg-foot">
+        <span id="add-target" class="muted small"></span>
+        <button type="button" class="btn ghost" data-close>Cancel</button>
+        <button id="add-save" type="submit" class="btn primary"><span class="spinner sm" hidden></span><span class="label">Save to website</span></button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- ============ Profile & sessions ============ -->
+  <dialog id="profile-dialog" class="dialog profile" aria-labelledby="profile-heading">
+    <div class="dlg">
+      <header class="dlg-head">
+        <h2 id="profile-heading">Profile</h2>
+        <button type="button" class="icon-btn" data-close aria-label="Close">✕</button>
+      </header>
+
+      <div class="dlg-body">
+        <div class="profile-card">
+          <div class="avatar" aria-hidden="true">👤</div>
+          <div>
+            <div id="profile-user" class="profile-user"></div>
+            <div id="profile-since" class="muted small"></div>
+          </div>
+        </div>
+
+        <div class="sess-head">
+          <h3>Signed-in sessions</h3>
+          <button id="sess-refresh" type="button" class="btn ghost sm">↻ Refresh</button>
+        </div>
+        <p id="sess-status" class="sess-status"></p>
+        <div id="sess-list" class="sess-list"></div>
+        <details id="sess-closed" class="sess-closed" hidden>
+          <summary>Recently ended</summary>
+          <div id="sess-closed-list" class="sess-list"></div>
+        </details>
+
+        <section id="signout-zone" class="signout-zone" hidden>
+          <h3>Sign out all other devices</h3>
+          <p class="muted small">
+            Locks the content with a new key: every other browser and every saved session stops working within a
+            minute. If you think someone else knows the password, also change it here.
+          </p>
+          <form id="signout-form" autocomplete="off" novalidate>
+            <label class="field"><span>Your current password</span><input id="so-pass" type="password" autocomplete="off"></label>
+            <label class="check"><input id="so-change" type="checkbox"> Also change the password</label>
+            <div id="so-new-wrap" class="row" hidden>
+              <label class="field grow"><span>New password <small>at least 12 characters</small></span><input id="so-new" type="password" autocomplete="off"></label>
+              <label class="field grow"><span>Repeat new password</span><input id="so-new2" type="password" autocomplete="off"></label>
+            </div>
+            <p id="so-error" class="login-error" role="alert" hidden></p>
+            <p id="so-done" class="login-error info" role="status" hidden></p>
+            <button id="so-btn" type="submit" class="btn danger"><span class="spinner sm" hidden></span><span class="label">Sign out all other devices</span></button>
+          </form>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
