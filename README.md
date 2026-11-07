@@ -54,7 +54,10 @@ Username, password (രണ്ട് തവണ) ചോദിക്കും — �
 npm start
 ```
 
-Browser-ൽ http://localhost:8080 തുറക്കുക.
+Browser-ൽ http://localhost:8765 തുറക്കുക.
+
+**Windows-ൽ എളുപ്പവഴി:** `start-local.bat` double-click ചെയ്യുക — menu-ൽ നിന്ന് site open, rebuild, check, deploy ചെയ്യാം.
+Port തിരക്കിലാണെങ്കിൽ server തനിയെ അടുത്ത free port എടുക്കും (window-ൽ address കാണിക്കും).
 
 ## 2. GitHub-ൽ publish ചെയ്യുക (ഒരു തവണ മാത്രം)
 
@@ -226,7 +229,7 @@ Login കൊടുത്താൽ എല്ലാ `.md` files-ഉം `content/`-
 | `npm run build` | build മാത്രം (push ഇല്ല — `npm start` വെച്ച് test ചെയ്യാൻ) |
 | `npm run build:new` | പുതിയ username / password set ചെയ്യും |
 | `npm run setup-editing` | Website-ലെ **＋ Add** button-ന് GitHub token set ചെയ്യും / off ചെയ്യും |
-| `npm start` | http://localhost:8080 ൽ test ചെയ്യാം |
+| `npm start` | http://localhost:8765 ൽ test ചെയ്യാം |
 | `npm run restore` | GitHub-ലെ encrypted data-യിൽ നിന്ന് `content/` തിരികെ എടുക്കും |
 
 Build ചെയ്യുമ്പോൾ website-ൽ ഉള്ള ഒരു file `content/`-ൽ ഇല്ലെങ്കിൽ (ഉദാ. അബദ്ധത്തിൽ delete ചെയ്താൽ),
